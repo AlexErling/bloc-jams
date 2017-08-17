@@ -1,4 +1,4 @@
- var animatePoints = function() {
+var animatePoints = function() {
    var revealPoint = function() {
      $(this).css({
          opacity: 1,
@@ -6,10 +6,6 @@
      });
    };
    $.each($('.point'), revealPoint);
-};
-
-var animatePoints = function(points) {
-      forEach(points, revealPoint);
 };
 
 $(window).load(function() {
