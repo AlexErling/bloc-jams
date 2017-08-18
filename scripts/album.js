@@ -14,9 +14,29 @@ var setSong = function (songNumber) {
   setVolume(currentVolume);
 };
 
+var filterTimeCode = function (time) {
+  var minutes = Math.floor(parseFloat(time) / 60);
+  var second = Math.floor(parseFloat(time) - (minutes * 60));
+  return minutes + ":" + (second < 10 ? "0" : "") + second;
+}
+
+var setCurrentTimeInPlayerBar = function () {
+  var time = currentSoundFile.getTime();
+  var finalTime = filterTimeCode(time);
+  $currentTime.html(finalTime);
+}
+
+var setTotalTimeInPlayerBar = function () {
+  var time = currentSoundFile.getDuration();
+  var finalTime = filterTimeCode(time);
+  $totalTime.html(finalTime);
+}
+
 var seek = function(time) {
     if (currentSoundFile) {
         currentSoundFile.setTime(time);
+
+
     }
 }
 
@@ -35,7 +55,7 @@ var createSongRow = function(songNumber, songName, songLength) {
        '<tr class="album-view-song-item">'
      + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
      + '  <td class="song-item-title">' + songName + '</td>'
-     + '  <td class="song-item-duration">' + songLength + '</td>'
+     + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
      + '</tr>'
      ;
 
@@ -132,6 +152,9 @@ var updateSeekBarWhileSongPlays = function() {
             var $seekBar = $('.seek-control .seek-bar');
 
             updateSeekPercentage($seekBar, seekBarFillRatio);
+
+            setCurrentTimeInPlayerBar();
+            setTotalTimeInPlayerBar();
         });
     }
 };
@@ -241,6 +264,7 @@ var previousSong = function() {
 
 
     updatePlayerBarSong();
+
     updateSeekBarWhileSongPlays();
 
     $('.main-controls .play-pause').html(playerBarPauseButton);
@@ -291,6 +315,8 @@ var currentVolume = 80;
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next')
 var $playPauseButton = $('.main-controls .play-pause')
+var $currentTime = $('.seek-control .current-time')
+var $totalTime = $('.seek-control .total-time')
 
 var albums = [albumPicasso, albumMarconi, albumErling];
 var index = 1;
